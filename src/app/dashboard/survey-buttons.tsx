@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Session } from '@supabase/auth-helpers-nextjs'
 
 export default function SurveyButtons({ session }: { session: Session | null }) {
 	return(
