@@ -6,7 +6,7 @@ export default function SurveyButtons({ session }: { session: Session | null }) 
 	return(
     <div>
       <h1>Survey Buttons</h1>
-      <div className="flex justify-center">
+      <div className="h-full flex items-center justify-center">
         <Link href="/dashboard/survey-view" className="bg-gradient-to-r from-red-500 to-pink-500 p-20 rounded-lg mx-4">
           View Surveys
         </Link>
