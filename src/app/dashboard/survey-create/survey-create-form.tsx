@@ -1,5 +1,4 @@
 'use client'
-import { Database } from '../../../types/database.types'
 import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { FormEvent, useState } from 'react';
 
@@ -19,6 +18,17 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
     console.log('Paper Probability:', paperProbability);
     console.log('Scissors Probability:', scissorsProbability);
     console.log('Trial Number:', trialNumber);
+
+    const rockProb = parseFloat(rockProbability);
+    const paperProb = parseFloat(paperProbability);
+    const scissorsProb = parseFloat(scissorsProbability);
+
+    // Check if the sum exceeds 1
+    const sum = rockProb + paperProb + scissorsProb;
+    if (sum > 1) {
+      alert('The sum of probabilities cannot exceed 1.');
+      return; // Prevent form submission
+    }
   };
 
   return (
@@ -26,13 +36,13 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="rockProbability" className="block font-medium mb-1">
-            Probability of Rock (0.00 - 0.99)
+            Probability of Rock (0.00 - 1.00)
           </label>
           <input
             type="number"
             step="0.01"
             min="0"
-            max="0.99"
+            max="1.00"
             id="rockProbability"
             className="w-full p-2 border rounded"
             value={rockProbability}
@@ -43,13 +53,13 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
 
         <div className="mb-4">
           <label htmlFor="paperProbability" className="block font-medium mb-1">
-            Probability of Paper (0.00 - 0.99)
+            Probability of Paper (0.00 - 1.00)
           </label>
           <input
             type="number"
             step="0.01"
             min="0"
-            max="0.99"
+            max="1.00"
             id="paperProbability"
             className="w-full p-2 border rounded"
             value={paperProbability}
@@ -60,13 +70,13 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
 
         <div className="mb-4">
           <label htmlFor="scissorsProbability" className="block font-medium mb-1">
-            Probability of Scissors (0.00 - 0.99)
+            Probability of Scissors (0.00 - 1.00)
           </label>
           <input
             type="number"
             step="0.01"
             min="0"
-            max="0.99"
+            max="1.00"
             id="scissorsProbability"
             className="w-full p-2 border rounded"
             value={scissorsProbability}
