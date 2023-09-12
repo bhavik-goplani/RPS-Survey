@@ -8,9 +8,10 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
   const [paperProbability, setPaperProbability] = useState('');
   const [scissorsProbability, setScissorsProbability] = useState('');
   const [trialNumber, setTrialNumber] = useState('');
+  const supabase = createClientComponentClient<Database>()
 
   // Function to handle form submission
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // You can perform further validation and submit the form data as needed
@@ -22,6 +23,7 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
     const rockProb = parseFloat(rockProbability);
     const paperProb = parseFloat(paperProbability);
     const scissorsProb = parseFloat(scissorsProbability);
+    const trialNo = parseInt(trialNumber);
 
     // Check if the sum exceeds 1
     const sum = rockProb + paperProb + scissorsProb;
@@ -29,6 +31,24 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
       alert('The sum of probabilities cannot exceed 1.');
       return; // Prevent form submission
     }
+
+    const { data, error } = await supabase.from('Section').insert([
+        {
+          rock_prob: rockProb,
+          paper_prob: paperProb,
+          scissor_prob: scissorsProb,
+          trial_no: trialNo,
+          survey_id: "c303e25d-9459-44b9-8f0c-7e4eab5dce4f", // Replace with the actual survey_id
+        },
+      ]);
+    
+      if (error) {
+        console.error('Error inserting data:', error);
+        // Handle error here
+      } else {
+        console.log('Data inserted successfully:', data);
+        // Handle success here
+      }
   };
 
   return (
