@@ -27,8 +27,8 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
 
     // Check if the sum exceeds 1
     const sum = rockProb + paperProb + scissorsProb;
-    if (sum > 1) {
-      alert('The sum of probabilities cannot exceed 1.');
+    if (sum != 1) {
+      alert('The sum of probabilities is not 1.');
       return; // Prevent form submission
     }
 
