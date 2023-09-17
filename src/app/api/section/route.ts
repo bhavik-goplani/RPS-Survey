@@ -32,3 +32,19 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.redirect(new URL('/dashboard', req.url), 303)
 }
+
+export async function GET(req: NextRequest) {
+  const supabase = createRouteHandlerClient({ cookies })
+  const { data, error } = await supabase.from('Section').select('*');
+
+  if (error) {
+    console.error('Error fetching data:', error);
+    // Handle error here
+  } else {
+    console.log('Data retrieved successfully:', data);
+    // Handle success here
+    // send data to frontend
+    console.log(data);
+    return NextResponse.json(data)
+  }
+}
