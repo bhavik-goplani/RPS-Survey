@@ -1,5 +1,5 @@
 'use client'
-import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Session } from '@supabase/auth-helpers-nextjs'
 import { FormEvent, useState } from 'react';
 
 export default function CreateSurveyForm({ session }: { session: Session | null }) {  
@@ -8,7 +8,6 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
   const [paperProbability, setPaperProbability] = useState('');
   const [scissorsProbability, setScissorsProbability] = useState('');
   const [trialNumber, setTrialNumber] = useState('');
-  const supabase = createClientComponentClient<Database>()
 
   // Function to handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -23,32 +22,28 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
     const rockProb = parseFloat(rockProbability);
     const paperProb = parseFloat(paperProbability);
     const scissorsProb = parseFloat(scissorsProbability);
-    const trialNo = parseInt(trialNumber);
+    const trialNum = parseInt(trialNumber);
 
     // Check if the sum exceeds 1
     const sum = rockProb + paperProb + scissorsProb;
     if (sum != 1) {
-      alert('The sum of probabilities is not 1.');
+      alert('The sum of probabilities is not 1!');
       return; // Prevent form submission
     }
 
-    const { data, error } = await supabase.from('Section').insert([
-        {
-          rock_prob: rockProb,
-          paper_prob: paperProb,
-          scissor_prob: scissorsProb,
-          trial_no: trialNo,
-          survey_id: "c303e25d-9459-44b9-8f0c-7e4eab5dce4f", // Replace with the actual survey_id
-        },
-      ]);
-    
-      if (error) {
-        console.error('Error inserting data:', error);
-        // Handle error here
-      } else {
-        console.log('Data inserted successfully:', data);
-        // Handle success here
-      }
+    // Send a POST request to the dashboard/section/create NextJS route
+    const res = await fetch('/api/section', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        rockProbability: rockProb,
+        paperProbability: paperProb,
+        scissorsProbability: scissorsProb,
+        trialNumber: trialNum,
+      }),
+    });
   };
 
   return (
@@ -65,6 +60,7 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
             max="1.00"
             id="rockProbability"
             className="w-full p-2 border rounded"
+            name="rockProbability"
             value={rockProbability}
             onChange={(e) => setRockProbability(e.target.value)}
             required
@@ -82,6 +78,7 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
             max="1.00"
             id="paperProbability"
             className="w-full p-2 border rounded"
+            name='paperProbability'
             value={paperProbability}
             onChange={(e) => setPaperProbability(e.target.value)}
             required
@@ -99,6 +96,7 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
             max="1.00"
             id="scissorsProbability"
             className="w-full p-2 border rounded"
+            name='scissorsProbability'
             value={scissorsProbability}
             onChange={(e) => setScissorsProbability(e.target.value)}
             required
@@ -116,6 +114,7 @@ export default function CreateSurveyForm({ session }: { session: Session | null 
             max="100"
             id="trialNumber"
             className="w-full p-2 border rounded"
+            name='trialNumber'
             value={trialNumber}
             onChange={(e) => setTrialNumber(e.target.value)}
             required
