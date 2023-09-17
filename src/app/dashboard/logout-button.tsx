@@ -1,4 +1,3 @@
-'use client'
 import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function LogoutButton({ session }: { session: Session | null }) {  
