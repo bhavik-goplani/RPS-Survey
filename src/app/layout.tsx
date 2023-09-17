@@ -1,4 +1,6 @@
 import '../styles/globals.css'
+import { ThemeProvider } from "@/components/theme-provider"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export default function RootLayout({
     children,
@@ -7,7 +9,17 @@ export default function RootLayout({
   }) {
     return (
       <html lang="en">
-        <body>{children}</body>
+        <head>
+          <title>RPS Survey</title>
+        </head>
+        <body>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="flex justify-end">
+              <ModeToggle />
+            </div>
+            {children}
+          </ThemeProvider>
+        </body>
       </html>
     )
   }
