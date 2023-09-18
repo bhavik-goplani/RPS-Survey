@@ -12,7 +12,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
-
+import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -24,31 +24,30 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
   })
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
+  const router = useRouter()
   async function onSubmit(data: FormData) {
     setIsLoading(true)
-
+    
     // Send a POST request to the auth/signin NextJS route
-    const res = await fetch('/api/auth/signin', {
+    const res = await fetch('/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-
+    console.log(res.ok)
     setIsLoading(false)
 
     // If an error occurred, display it in a toast
-    if (res.status === 401) {
-      const error = await res.text();
-      console.error(error);
+    if (!res.ok) {
       return toast({
         title: "Something went wrong.",
         description: "Your sign in request failed. Please try again.",
         variant: "destructive",
       })
     }
+    router.refresh()
   }
 
   const supabase = createClientComponentClient<Database>();
