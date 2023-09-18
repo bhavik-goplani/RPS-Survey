@@ -2,6 +2,7 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
@@ -21,6 +22,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
   })
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const router = useRouter()
 
   async function onSubmit(data: FormData) {
     setIsLoading(true)
@@ -46,6 +48,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
         variant: "destructive",
       })
     }
+    router.refresh()
   }
   return (
     <div className={cn("grid gap-6", className)} {...props}>
