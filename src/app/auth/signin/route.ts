@@ -1,25 +1,30 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: Request) {
-  const formData = await request.formData()
-  const email = String(formData.get('email'))
-  const password = String(formData.get('password'))
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const email = String(body['email'])
+  const password = String(body['password'])
   const supabase = createRouteHandlerClient<Database>({ cookies })
 
-  try {
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+  console.log(email, password)
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+    console.log(data, error)
+  if (!error) {
 
     return NextResponse.redirect(new URL('/dashboard', request.url), {
       status: 302,
     })
-  } catch (error) {
+  }
+  else {
+    console.log(error)
     return NextResponse.json({error}, {
       status: 401,
     })
