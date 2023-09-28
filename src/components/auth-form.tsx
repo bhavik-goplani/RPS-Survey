@@ -28,27 +28,26 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     setIsLoading(true)
 
     // Send a POST request to the auth/signin NextJS route
-    const res = await fetch('/auth/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    setIsLoading(false)
-
-    // If an error occurred, display it in a toast
-    if (res.status === 401) {
-      const error = await res.text();
-      console.error(error);
+    try {
+      const res = await fetch('/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      setIsLoading(false)
+      router.refresh()
+    }
+    catch (error) {
+      console.log(error);
       return toast({
         title: "Something went wrong.",
         description: "Your sign in request failed. Please try again.",
         variant: "destructive",
       })
     }
-    router.refresh()
   }
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -102,6 +101,15 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
           </button>
         </div>
       </form>
+      <button className={cn(buttonVariants())} onClick={() =>
+            toast({
+              title: "Test",
+              description: "This is a test.",
+              variant: "default"
+            })
+          }>
+            Test
+      </button>
     </div>
   )
 }
