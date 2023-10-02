@@ -10,13 +10,10 @@ export async function POST(request: NextRequest) {
   const password = String(body['password'])
   const supabase = createRouteHandlerClient<Database>({ cookies })
 
-  console.log(email, password)
-
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
-    console.log(data, error)
   if (!error) {
 
     return NextResponse.redirect(new URL('/dashboard', request.url), {
@@ -24,7 +21,6 @@ export async function POST(request: NextRequest) {
     })
   }
   else {
-    console.log(error)
     return NextResponse.json({error}, {
       status: 401,
     })
