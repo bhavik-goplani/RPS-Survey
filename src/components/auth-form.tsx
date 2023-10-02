@@ -11,7 +11,7 @@ import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 type FormData = z.infer<typeof userAuthSchema>
@@ -21,6 +21,8 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     resolver: zodResolver(userAuthSchema),
   })
 
+  const { toast } = useToast()
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const router = useRouter()
 
@@ -28,24 +30,28 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     setIsLoading(true)
 
     // Send a POST request to the auth/signin NextJS route
-    try {
-      const res = await fetch('/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      setIsLoading(false)
-      router.refresh()
-    }
-    catch (error) {
-      console.log(error);
+    const res = await fetch('/auth/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    setIsLoading(false)
+
+    if (res.status === 401) {
       return toast({
         title: "Something went wrong.",
         description: "Your sign in request failed. Please try again.",
         variant: "destructive",
+      })
+    }
+    else {
+      router.refresh()
+      return toast({
+        title: "Success!",
+        description: "You've successfully signed in.",
       })
     }
   }
@@ -101,15 +107,6 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
           </button>
         </div>
       </form>
-      <button className={cn(buttonVariants())} onClick={() =>
-            toast({
-              title: "Test",
-              description: "This is a test.",
-              variant: "default"
-            })
-          }>
-            Test
-      </button>
     </div>
   )
 }
