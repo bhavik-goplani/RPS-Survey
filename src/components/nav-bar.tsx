@@ -1,10 +1,13 @@
 'use client'
 import { ModeToggle } from "@/components/mode-toggle"
 import Link from 'next/link'
+import LogoutButton from '@/components/logout-button'
+import { Session } from '@supabase/auth-helpers-nextjs'
 
-export function NavBar() {
+
+export function NavBar( { session }: { session: Session | null }) {
     return (
-        <div className="flex justify-between p-4">
+        <div className="flex justify-between p-6">
             <div className="relative z-20 flex items-center text-lg font-medium">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +25,14 @@ export function NavBar() {
                     RPS Survey App 
                 </Link>
             </div>
-            <ModeToggle />
+            <div className="flex">
+                <div className="pr-4"> {/* Add padding-right for spacing */}
+                    <LogoutButton session={session} />
+                </div>
+                <div className="ml-4"> {/* Add margin-left for spacing */}
+                    <ModeToggle />
+                </div>
+            </div>
         </div>
     )
 }
