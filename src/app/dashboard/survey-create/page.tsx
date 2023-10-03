@@ -1,6 +1,6 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import CreateSurveyForm from './survey-create-form'
+import CreateSurveyForm from '@/components/survey-create-form'
 
 export default async function Home() {
     const supabase = createServerComponentClient<Database>({ cookies })
