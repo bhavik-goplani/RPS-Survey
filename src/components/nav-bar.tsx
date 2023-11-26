@@ -1,9 +1,11 @@
 'use client'
-import { ModeToggle } from "@/components/mode-toggle"
 import Link from 'next/link'
-import LogoutButton from '@/components/logout-button'
 import { Session } from '@supabase/auth-helpers-nextjs'
 
+import { ModeToggle } from "@/components/mode-toggle"
+import LogoutButton from '@/components/logout-button'
+import ViewResponseButton from '@/components/view-response-button'
+import ViewSurveyButton from '@/components/view-survey-button'
 
 export function NavBar( { session }: { session: Session | null }) {
     return (
@@ -26,6 +28,12 @@ export function NavBar( { session }: { session: Session | null }) {
                 </Link>
             </div>
             <div className="flex">
+                <div className="pr-4"> {/* Add padding-right for spacing */}
+                    <ViewSurveyButton session={session} />
+                </div>
+                <div className="pr-4"> {/* Add padding-right for spacing */}
+                    <ViewResponseButton session={session} />
+                </div>
                 <div className="pr-4"> {/* Add padding-right for spacing */}
                     <LogoutButton session={session} />
                 </div>

@@ -7,13 +7,11 @@ export default function LogoutButton({ session }: { session: Session | null }) {
   if (!session) return (<></>)
   return (
     <div className="form-widget">
-      <div>
         <form action="/auth/signout" method="post">
-          <button className={cn(buttonVariants())} type="submit">
+          <button className={cn(buttonVariants({variant: "ghost"}))} type="submit">
             Sign out
           </button>
         </form>
-      </div>
     </div>
   )
 }
