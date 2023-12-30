@@ -1,7 +1,8 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { Survey, columns } from '@/components/survey-dashboard/columns'
-import { DataTable } from '@/components/ui/data-table'
+import { DataTable } from '@/components/survey-dashboard/data-table'
+import { CreateSurvey } from "@/components/survey-dashboard/create-survey"
 
 
 export default async function Home() {
@@ -24,6 +25,10 @@ export default async function Home() {
     return (
         <>
             <div className="container mx-auto py-10">
+                <div className='flex justify-between'>
+                    <h1 className="text-2xl font-semibold tracking-tight">Surveys</h1>
+                    <CreateSurvey />
+                </div>
                 <DataTable columns={columns} data={data} />
             </div>
         </>
