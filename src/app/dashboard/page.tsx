@@ -4,6 +4,7 @@ import { Survey, columns } from '@/components/survey-dashboard/columns'
 import { DataTable } from '@/components/survey-dashboard/data-table'
 import { CreateSurvey } from "@/components/survey-dashboard/create-survey"
 
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
     const cookieStore = cookies()
