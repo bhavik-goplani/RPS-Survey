@@ -6,7 +6,8 @@ import { CreateSurvey } from "@/components/survey-dashboard/create-survey"
 
 
 export default async function Home() {
-    const supabase = createServerComponentClient<Database>({ cookies })
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient<Database>({ cookies: () => cookieStore })
 
     const {
         data: { session },
