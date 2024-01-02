@@ -18,7 +18,6 @@ export default async function Home() {
         let { data: Survey, error } = await supabase
         .from('Survey')
         .select('*')
-        console.log(Survey)
         if (error) console.log('error', error)
         return Survey as Survey[]
     }
