@@ -110,7 +110,7 @@ export const columns: ColumnDef<Survey>[] = [
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
             <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                 This action cannot be undone. This survey will no longer be
                 accessible by you or others you&apos;ve shared it with.
