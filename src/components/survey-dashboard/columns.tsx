@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import * as React from "react"
 import { toast } from "@/components/ui/use-toast"
+import { useRouter } from 'next/navigation'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -62,19 +63,43 @@ export const columns: ColumnDef<Survey>[] = [
     cell: function SurveyTableRow({ row }) {
       const survey = row.original
       const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+      const router = useRouter()
 
-      function deleteSurvey(survey_id: string) {
+      async function deleteSurvey(survey_id: string) {
         setDeleteDialogOpen(false);
         
-        // const res = fetch('/api/survey', {
-        //     method: 'DELETE',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //       survey_id: survey_id,
-        //     }),
-        //   });
+        try {
+            const res = await fetch(`/api/survey?survey_id=${survey_id}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+            if (res.ok) {
+                router.refresh()
+                toast({
+                    title: "Success!",
+                    description: "Survey has been deleted.",
+                  })
+                }
+            else {
+                console.log(res)
+                toast({
+                    title: "Something went wrong.",
+                    description: "Your survey could not be deleted.",
+                    variant: "destructive",
+                  })
+            }
+        }
+        catch (err) {
+            console.log(err)
+            toast({
+                title: "Something went wrong.",
+                description: "Your survey could not be deleted.",
+                variant: "destructive",
+              })
+        }
+
     }
 
       return (
@@ -121,11 +146,7 @@ export const columns: ColumnDef<Survey>[] = [
                 <Button
                 variant="destructive"
                 onClick={() => {
-                    setDeleteDialogOpen(false)
                     deleteSurvey(survey.survey_id)
-                    toast({
-                    description: "This survey has been deleted.",
-                    })
                 }}
                 >
                 Delete
