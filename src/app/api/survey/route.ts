@@ -29,3 +29,23 @@ export async function POST(req: NextRequest) {
     
     return NextResponse.redirect(new URL('/dashboard', req.url), 303)
 }
+
+export async function DELETE(req: NextRequest) {
+    const supabase = createRouteHandlerClient({ cookies })
+    const url = new URL(req.url);
+    const survey_id = url.searchParams.get('survey_id');
+  
+    const { data, error } = await supabase
+      .from('Survey')
+      .delete()
+      .match({ survey_id: survey_id });
+  
+    if (error) {
+      console.error('Error deleting data:', error);
+      return NextResponse.json({error}, {
+        status: 401,
+      })
+    }
+  
+    return NextResponse.redirect(new URL('/dashboard', req.url), 303);
+}
