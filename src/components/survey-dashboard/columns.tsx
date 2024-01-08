@@ -16,15 +16,15 @@ import { toast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+
+import { EditSurvey } from "@/components/survey-dashboard/edit-survey"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -63,6 +63,7 @@ export const columns: ColumnDef<Survey>[] = [
     cell: function SurveyTableRow({ row }) {
       const survey = row.original
       const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+      const [editDialogOpen, setEditDialogOpen] = React.useState(false);
       const router = useRouter()
 
       async function deleteSurvey(survey_id: string) {
@@ -119,7 +120,12 @@ export const columns: ColumnDef<Survey>[] = [
             >
               Copy Survey ID
             </DropdownMenuItem>
-            <DropdownMenuItem >Edit Survey</DropdownMenuItem>
+            <DropdownMenuItem 
+              onSelect={() => {
+                  setEditDialogOpen(true)
+                  document.body.style.pointerEvents = ""
+              }}
+              >Edit Survey</DropdownMenuItem>
             <DropdownMenuItem>View/Edit Sections</DropdownMenuItem>
             <DropdownMenuItem>Create Link for Participant</DropdownMenuItem>
             <DropdownMenuItem 
@@ -154,6 +160,7 @@ export const columns: ColumnDef<Survey>[] = [
             </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
+        <EditSurvey survey_id={survey.survey_id} editDialogOpen={editDialogOpen} setEditDialogOpen={setEditDialogOpen} />
         </>
       )
     },

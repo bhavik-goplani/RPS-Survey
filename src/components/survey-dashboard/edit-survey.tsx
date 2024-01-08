@@ -4,7 +4,6 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 
 import {
@@ -32,7 +31,13 @@ const formSchema = z.object({
     section_count: z.number().min(0).max(100),
   })
 
-export function CreateSurvey() {
+interface EditSurveyProps {
+  editDialogOpen: boolean;
+  setEditDialogOpen: (value: boolean) => void;
+  survey_id: string;
+}
+
+export function EditSurvey({editDialogOpen, setEditDialogOpen, survey_id}: EditSurveyProps) {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,7 +48,6 @@ export function CreateSurvey() {
         },
       })
       
-      const [isOpen, setIsOpen] = React.useState(false)
       const { reset } = form
       const router = useRouter()
       const { toast } = useToast()
@@ -52,10 +56,10 @@ export function CreateSurvey() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         reset()
-        setIsOpen(false)
+        setEditDialogOpen(false)
 
         const res = await fetch('/api/survey', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -63,37 +67,35 @@ export function CreateSurvey() {
               name: values.name,
               description: values.description,
               section_count: values.section_count,
+              survey_id: survey_id,
             }),
           });
         if (res.ok) {
             router.refresh()
             return toast({
                 title: "Success!",
-                description: "Survey has been added to the table.",
+                description: "Survey has been modified.",
               })
         }
         else {
             return toast({
                 title: "Something went wrong.",
-                description: "Your survey could not be added to the table.",
+                description: "Your survey could not be modified.",
                 variant: "destructive",
               })
         }
       }
 
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => {
-            setIsOpen(open);
+        <Dialog open={editDialogOpen} onOpenChange={(open) => {
+            setEditDialogOpen(open)
             if (!open) {
               reset(); // Reset form values when dialog closes
             }
           }}>
-          <DialogTrigger asChild>
-            <Button variant="outline">Create New Survey</Button>
-          </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Create New Survey</DialogTitle>
+              <DialogTitle>Edit Survey</DialogTitle>
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
