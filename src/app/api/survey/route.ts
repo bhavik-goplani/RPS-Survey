@@ -49,3 +49,28 @@ export async function DELETE(req: NextRequest) {
   
     return NextResponse.redirect(new URL('/dashboard', req.url), 303);
 }
+
+export async function PUT(req: NextRequest) {
+    const supabase = createRouteHandlerClient({ cookies })
+    const body = await req.json();
+    const survey_id = body['survey_id'];
+    const name = body['name'];
+    const description = body['description'];
+    const section_count = body['section_count'];
+
+    const { data, error } = await supabase
+    .from('Survey')
+    .update({ name: name, description: description, section_count: section_count })
+    .eq('survey_id', survey_id)
+    .select()
+    
+    if (error) {
+        console.error('Error inserting data:', error);
+        // Handle error here
+      } else {
+        console.log('Data inserted successfully:', data);
+        // Handle success here
+      }
+    
+    return NextResponse.redirect(new URL('/dashboard', req.url), 303)
+}
