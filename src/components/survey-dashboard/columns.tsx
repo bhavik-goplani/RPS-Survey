@@ -14,6 +14,7 @@ import {
 import * as React from "react"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
+import Link from 'next/link';
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -126,7 +127,11 @@ export const columns: ColumnDef<Survey>[] = [
                   document.body.style.pointerEvents = ""
               }}
               >Edit Survey</DropdownMenuItem>
-            <DropdownMenuItem>View/Edit Sections</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/dashboard/${survey.survey_id}`}>
+                View/Edit Sections
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Create Link for Participant</DropdownMenuItem>
             <DropdownMenuItem 
                 onSelect={() => {
