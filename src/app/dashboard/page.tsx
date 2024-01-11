@@ -9,10 +9,6 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
     const cookieStore = cookies()
     const supabase = createServerComponentClient<Database>({ cookies: () => cookieStore })
-
-    const {
-        data: { session },
-    } = await supabase.auth.getSession()
     
     async function getSurveys() : Promise<Survey[]> {        
         let { data: Survey, error } = await supabase
