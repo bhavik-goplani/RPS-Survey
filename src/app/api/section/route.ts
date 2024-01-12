@@ -7,20 +7,20 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   const supabase = createRouteHandlerClient({ cookies })
   const body = await req.json();
-  console.log(body);
 
-  const rockProb = body['rockProbability'];
-  const paperProb = body['paperProbability'];
-  const scissorsProb = body['scissorsProbability'];
-  const trialNo = body['trialNumber'];
+  const rock_prob = body['rockProbability'];
+  const paper_prob = body['paperProbability'];
+  const scissor_prob = body['scissorsProbability'];
+  const trial_no = body['trialNumber'];
+  const survey_id = body['survey_id'];
 
   const { data, error } = await supabase.from('Section').insert([
     {
-      rock_prob: rockProb,
-      paper_prob: paperProb,
-      scissor_prob: scissorsProb,
-      trial_no: trialNo,
-      survey_id: "c303e25d-9459-44b9-8f0c-7e4eab5dce4f", // Replace with the actual survey_id
+      rock_prob: rock_prob,
+      paper_prob: paper_prob,
+      scissor_prob: scissor_prob,
+      trial_no: trial_no,
+      survey_id: survey_id,
     },
   ]);
 

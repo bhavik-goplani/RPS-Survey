@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
     const supabase = createRouteHandlerClient({ cookies })
     const body = await req.json();
-    console.log(body);
+
     const name = body['name'];
     const description = body['description'];
     const section_count = body['section_count'];
