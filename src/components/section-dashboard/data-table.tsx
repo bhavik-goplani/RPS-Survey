@@ -23,7 +23,6 @@ import {
 
 import { Button } from "@/components/ui/button"
 import * as React from "react"
-import { Input } from "@/components/ui/input"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
