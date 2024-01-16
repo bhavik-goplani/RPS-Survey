@@ -25,6 +25,8 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
+import { EditSection } from "@/components/section-dashboard/edit-section"
+
 export type Section = {
     paper_prob: number;
     rock_prob: number;
@@ -90,5 +92,110 @@ export const columns: ColumnDef<Section>[] = [
               </Button>
             )
           },
+    },
+    {
+        id: "actions",
+        cell: function SectionTableRow({ row }) {
+          const section = row.original
+          const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+          const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+          const router = useRouter()
+
+          async function deleteSection(section_id: string) {
+            setDeleteDialogOpen(false);
+            
+            try {
+                const res = await fetch(`/api/section?section_id=${section_id}`, {
+                    method: 'DELETE',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  });
+                if (res.ok) {
+                    router.refresh()
+                    toast({
+                        title: "Success!",
+                        description: "Section has been deleted.",
+                      })
+                    }
+                else {
+                    console.log(res)
+                    toast({
+                        title: "Something went wrong.",
+                        description: "Your section could not be deleted.",
+                        variant: "destructive",
+                      })
+                }
+            }
+            catch (err) {
+                console.log(err)
+                toast({
+                    title: "Something went wrong.",
+                    description: "Your section could not be deleted.",
+                    variant: "destructive",
+                  })
+            }
+
+        }
+
+          return (
+            <>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => navigator.clipboard.writeText(section.section_id)}
+                >
+                  Copy Section ID
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onSelect={() => {
+                      setEditDialogOpen(true)
+                      document.body.style.pointerEvents = ""
+                  }}
+                  >Edit Section</DropdownMenuItem>
+                <DropdownMenuItem 
+                    onSelect={() => {
+                        setDeleteDialogOpen(true)
+                        document.body.style.pointerEvents = ""
+                    }}
+                    className="text-red-600"
+                    >Delete</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                    This action cannot be undone. This section will no longer be
+                    accessible by you or others you&apos;ve shared it with.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button
+                    variant="destructive"
+                    onClick={() => {
+                        deleteSection(section.section_id)
+                    }}
+                    >
+                    Delete
+                    </Button>
+                </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <EditSection section_id={section.section_id} editDialogOpen={editDialogOpen} setEditDialogOpen={setEditDialogOpen} />
+            </>
+          )
+        },
     },
     ]
