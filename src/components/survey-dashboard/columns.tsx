@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { EditSurvey } from "@/components/survey-dashboard/edit-survey"
+import { GenerateLink } from "@/components/survey-dashboard/generate-link"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -65,6 +66,7 @@ export const columns: ColumnDef<Survey>[] = [
       const survey = row.original
       const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
       const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+      const [generateLinkDialogOpen, setGenerateLinkDialogOpen] = React.useState(false);
       const router = useRouter()
 
       async function deleteSurvey(survey_id: string) {
@@ -132,7 +134,12 @@ export const columns: ColumnDef<Survey>[] = [
                 View/Edit Sections
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Create Link for Participant</DropdownMenuItem>
+            <DropdownMenuItem
+                onSelect={() => {
+                    setGenerateLinkDialogOpen(true)
+                    document.body.style.pointerEvents = ""
+                }}
+                >Create Link for Participant</DropdownMenuItem>
             <DropdownMenuItem 
                 onSelect={() => {
                     setDeleteDialogOpen(true)
@@ -166,6 +173,7 @@ export const columns: ColumnDef<Survey>[] = [
             </AlertDialogContent>
         </AlertDialog>
         <EditSurvey survey_id={survey.survey_id} editDialogOpen={editDialogOpen} setEditDialogOpen={setEditDialogOpen} />
+        <GenerateLink survey_id={survey.survey_id} generateLinkDialogOpen={generateLinkDialogOpen} setGenerateLinkDialogOpen={setGenerateLinkDialogOpen} />
         </>
       )
     },
