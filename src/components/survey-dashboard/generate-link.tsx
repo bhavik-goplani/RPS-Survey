@@ -21,10 +21,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useRouter } from 'next/navigation'
 import * as React from "react"
 import { useToast } from "@/components/ui/use-toast"
-import { Icons } from "@/components/icons"
+import { v4 as uuidv4 } from 'uuid';
 
 const formSchema = z.object({
     participant_email: z.string().email(),
@@ -46,7 +45,6 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
       })
       
       const { reset } = form
-      const router = useRouter()
       const { toast } = useToast()
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -55,15 +53,44 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
         reset()
         setGenerateLinkDialogOpen(false)
 
+        const participant_id = uuidv4()
+        const link = `${process.env.NEXT_PUBLIC_ROOT_URL}/${participant_id}`
+        navigator.clipboard.writeText(link)
+
         const { participant_email } = values
         const res = await fetch('/api/participant', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({participant_email, survey_id})
+            body: JSON.stringify({participant_email, survey_id, participant_id})
         })
-        const data = await res.json()
+        
+        if (res.ok) {
+            console.log("Participant created")
+        } else {
+            console.log("Participant not created")
+        }
+        const email_res = await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({participant_email, link})
+        })
+
+        if (email_res) {
+            toast({
+                title: "Email sent",
+                description: "Participant invite sent successfully",
+              })
+        } else {
+            toast({
+                title: "Something went wrong.",
+                description: "Your email could not be sent.",
+                variant: "destructive",
+              })
+        }
       }
 
       return(
@@ -89,19 +116,13 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
                             <Input placeholder="" {...field} />
                         </FormControl>
                         <FormDescription>
-                            This is the email of the participant.
+                            Link will be copied to clipboard
                         </FormDescription>
                         <FormMessage />
                         </FormItem>
                     )}
                 />
-				<div className="flex justify-between">
-					<Button type="submit">Send Invite</Button>
-					<Button variant={"outline"} className="flex items-center justify-center">
-						<Icons.copy_link className="text-white" />
-						<span className="ml-2">Copy Link</span>
-					</Button>
-				</div>
+				<Button type="submit">Send Invite</Button>
                 </form>
             </Form>
             </DialogContent>        
