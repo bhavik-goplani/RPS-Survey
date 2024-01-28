@@ -3,9 +3,11 @@ import { Session } from '@supabase/auth-helpers-nextjs'
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export default function SurveyButtons({ session }: { session: Session | null }) {
+export default function SurveyButtons({ session, userRole }: { session: Session | null, userRole: string | null }) {
   
   if (!session) return (<></>)
+  else if (userRole == 'participant') return (<></>)
+  else 
 	return(
       <div className="">
         <Link href="/dashboard/view-response">

@@ -2,12 +2,12 @@
 import Link from 'next/link'
 import { Session } from '@supabase/auth-helpers-nextjs'
 
-import { ModeToggle } from "@/components/mode-toggle"
-import LogoutButton from '@/components/logout-button'
-import ViewResponseButton from '@/components/view-response-button'
-import ViewSurveyButton from '@/components/view-survey-button'
+import { ModeToggle } from "@/components/navbar/mode-toggle"
+import LogoutButton from '@/components/navbar/logout-button'
+import ViewResponseButton from '@/components/navbar/view-response-button'
+import ViewSurveyButton from '@/components/navbar/view-survey-button'
 
-export function NavBar( { session }: { session: Session | null }) {
+export function NavBar( { session, userRole }: { session: Session | null, userRole: string | null }) {
     return (
         <div className="flex justify-between p-6">
             <div className="relative z-20 flex items-center text-lg font-medium">
@@ -29,10 +29,10 @@ export function NavBar( { session }: { session: Session | null }) {
             </div>
             <div className="flex">
                 <div className="pr-4"> {/* Add padding-right for spacing */}
-                    <ViewSurveyButton session={session} />
+                    <ViewSurveyButton session={session} userRole={userRole}/>
                 </div>
                 <div className="pr-4"> {/* Add padding-right for spacing */}
-                    <ViewResponseButton session={session} />
+                    <ViewResponseButton session={session} userRole={userRole}/>
                 </div>
                 <div className="pr-4"> {/* Add padding-right for spacing */}
                     <LogoutButton session={session} />
