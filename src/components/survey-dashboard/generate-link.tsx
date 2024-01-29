@@ -71,12 +71,14 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
         } else {
             console.log("Participant not created")
         }
+        const data = await res.json()
+        const password = data.password
         const email_res = await fetch('/api/send', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({participant_email, link})
+            body: JSON.stringify({participant_email, link, password})
         })
 
         if (email_res) {
