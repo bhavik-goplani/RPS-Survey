@@ -11,8 +11,16 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // if user is signed in and the current path is / redirect the user to /account
-  if (user && req.nextUrl.pathname === '/') {
+  let user_role;
+  if (user) {
+      user_role = user.role;
+  }
+  else {
+      user_role = 'none';
+  }
+
+  // if user is signed in and the current path is / redirect the user to /dashboard
+  if (user && user_role === 'authenticated' && req.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
@@ -21,9 +29,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
+  if (user && user_role === 'anon' && (req.nextUrl.pathname === '/' || req.nextUrl.pathname.startsWith('/dashboard'))) {
+    return NextResponse.redirect(new URL(`/participant/${user.id}`, req.url))
+  }
+
   return res
 }
 
 export const config = {
-  matcher: ['/', '/dashboard/:path*'],
+  matcher: ['/', '/dashboard/:path*', '/participant/:path*'],
 }

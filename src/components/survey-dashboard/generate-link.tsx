@@ -53,17 +53,13 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
         reset()
         setGenerateLinkDialogOpen(false)
 
-        const participant_id = uuidv4()
-        const link = `${process.env.NEXT_PUBLIC_ROOT_URL}/${participant_id}`
-        navigator.clipboard.writeText(link)
-
         const { participant_email } = values
         const res = await fetch('/api/participant', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({participant_email, survey_id, participant_id})
+            body: JSON.stringify({participant_email, survey_id})
         })
         
         if (res.ok) {
@@ -71,12 +67,18 @@ export function GenerateLink({generateLinkDialogOpen, setGenerateLinkDialogOpen,
         } else {
             console.log("Participant not created")
         }
+        const data = await res.json()
+        const password = data.password
+        const participant_id = data.participant_id
+        const link = `${process.env.NEXT_PUBLIC_ROOT_URL}/participant/${participant_id}`
+        navigator.clipboard.writeText(link)
+
         const email_res = await fetch('/api/send', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({participant_email, link})
+            body: JSON.stringify({participant_email, link, password})
         })
 
         if (email_res) {

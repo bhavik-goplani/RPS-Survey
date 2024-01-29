@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const supabase = createRouteHandlerClient({ cookies })
-  const { data, error } = await supabase.from('Section').select('*');
+  const url = new URL(req.url);
+  const survey_id = url.searchParams.get('survey_id');
+  const { data, error } = await supabase.from('Section').select('section_id').eq('survey_id', survey_id);
 
   if (error) {
     console.error('Error fetching data:', error);
@@ -45,8 +47,6 @@ export async function GET(req: NextRequest) {
   } else {
     console.log('Data retrieved successfully:', data);
     // Handle success here
-    // send data to frontend
-    console.log(data);
     return NextResponse.json(data)
   }
 }

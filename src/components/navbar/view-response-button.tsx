@@ -3,14 +3,16 @@ import { Session } from '@supabase/auth-helpers-nextjs'
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export default function SurveyButtons({ session }: { session: Session | null }) {
-	
+export default function SurveyButtons({ session, userRole }: { session: Session | null, userRole: string | null }) {
+  
   if (!session) return (<></>)
-  return(
+  else if (userRole == 'anon') return (<></>)
+  else 
+	return(
       <div className="">
-        <Link href="/dashboard">
+        <Link href="/dashboard/view-response">
           <button className={cn(buttonVariants({variant: "ghost"}))}>
-            View Surveys
+            View Responses
           </button>
         </Link>
       </div>
