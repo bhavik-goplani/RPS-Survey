@@ -11,13 +11,31 @@ export async function POST(req: NextRequest) {
 
     const participant_email = body['participant_email'];
     const survey_id = body['survey_id'];
-    const participant_id = body['participant_id'];
 
     // Generate a secure random password for the use
     function generatePassword(length = 10) {
         return crypto.randomBytes(length).toString('hex');
     }
     const password = generatePassword();
+
+    
+
+    const { data:Userdata, error:Usererror } = await supabase.rpc('create_user', {
+        email: participant_email,
+        password: password,
+    });
+
+    // get participant_id from create_user function
+    if (Usererror) {
+        console.error('Error inserting user:', Usererror);
+        // Handle error here
+    }
+    else {
+        console.log('User created successfully:', Userdata);
+        // Handle success here
+    }
+
+    const participant_id = Userdata;
 
     const { data, error } = await supabase.from('Participant').insert([
         {
@@ -27,12 +45,6 @@ export async function POST(req: NextRequest) {
         },
     ]);
 
-    const { data:Userdata, error:Usererror } = await supabase.rpc('create_user', {
-        email: participant_email,
-        password: password,
-    });
-
-
     if (error) {
         console.error('Error inserting data:', error);
         // Handle error here
@@ -40,17 +52,8 @@ export async function POST(req: NextRequest) {
         console.log('Data inserted successfully:', data);
         // Handle success here
     }
-
-    if (Usererror) {
-        console.error('Error inserting user:', Usererror);
-        // Handle error here
-    }
-    else {
-        console.log('User created successfully:', Userdata);
-        // Handle success here
-    }
     
-    return NextResponse.json({ password: password })
+    return NextResponse.json({ password: password, participant_id: participant_id })
 }
 
 export async function GET(req: NextRequest) {
@@ -60,7 +63,7 @@ export async function GET(req: NextRequest) {
     const { data, error } = await supabase.from('Participant').select('survey_id').eq('participant_id', participant_id);
 
     if (error) {
-        console.error('Error fetching data: yoyo', error);
+        console.error('Error fetching data:', error);
         // Handle error here
     } else {
         console.log('Data retrieved successfully:', data);
