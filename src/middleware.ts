@@ -19,9 +19,6 @@ export async function middleware(req: NextRequest) {
       user_role = 'none';
   }
 
-  // const isParticipantPath = /^\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(\/|$)/.test(req.url);
-  console.log(user_role);
-
   // if user is signed in and the current path is / redirect the user to /dashboard
   if (user && user_role === 'authenticated' && req.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
@@ -32,7 +29,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (user && user_role === 'participant' && (req.nextUrl.pathname === '/' || req.nextUrl.pathname.startsWith('/dashboard'))) {
+  if (user && user_role === 'anon' && (req.nextUrl.pathname === '/' || req.nextUrl.pathname.startsWith('/dashboard'))) {
     return NextResponse.redirect(new URL(`/participant/${user.id}`, req.url))
   }
 

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 export default function SurveyButtons({ session, userRole }: { session: Session | null, userRole: string | null }) {
 	
   if (!session) return (<></>)
-  else if (userRole == 'participant') return (<></>)
+  else if (userRole == 'anon') return (<></>)
   else 
   return(
       <div className="">
