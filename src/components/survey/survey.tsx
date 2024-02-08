@@ -70,7 +70,7 @@ export function Survey({ participant_id }: { participant_id: string }) {
             </>
         )
     }
-
+    const isLastSection = currentSectionIndex === sections.length - 1
     return (
         <>
             <div className="container mx-auto py-10">
@@ -79,7 +79,11 @@ export function Survey({ participant_id }: { participant_id: string }) {
                 </div>
                 {sections.length > 0 && (
                 <div key={sections[currentSectionIndex].section_id}>
-                    <Section section_id={sections[currentSectionIndex].section_id} onComplete={() => setCurrentSectionIndex(currentSectionIndex + 1)} />
+                    <Section 
+                        section_id={sections[currentSectionIndex].section_id} 
+                        onComplete={() => setCurrentSectionIndex(currentSectionIndex + 1)}
+                        isLastSection={isLastSection}    
+                    />
                 </div>
                 )}
             </div>
