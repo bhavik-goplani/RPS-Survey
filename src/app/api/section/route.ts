@@ -39,7 +39,10 @@ export async function GET(req: NextRequest) {
   const supabase = createRouteHandlerClient({ cookies })
   const url = new URL(req.url);
   const survey_id = url.searchParams.get('survey_id');
-  const { data, error } = await supabase.from('Section').select('section_id').eq('survey_id', survey_id);
+  const { data, error } = await supabase
+    .from('Section')
+    .select('section_id, rock_prob, paper_prob, scissor_prob, trial_no')
+    .eq('survey_id', survey_id);
 
   if (error) {
     console.error('Error fetching data:', error);
