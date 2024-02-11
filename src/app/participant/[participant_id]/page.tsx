@@ -87,10 +87,8 @@ export default function Page({ params }: { params: { participant_id: string } })
         <> 
             <SurveyContext.Provider value={{ ...context }}>
             <div className="container mx-auto py-10">
-                <div className='flex justify-between'>
-                    <h1 className="text-2xl font-semibold tracking-tight">Welcome to the Survey!</h1>
-                    <Survey/>
-                </div>
+                <h1 className="text-2xl font-semibold tracking-tight">Welcome to the Survey!</h1>
+                <Survey/>
             </div>
             </SurveyContext.Provider>
         </>
