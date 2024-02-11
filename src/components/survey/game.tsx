@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { Button } from "@/components/ui/button"
+import { useSurvey } from '@/components/survey/survey-context'
 
 interface Section {
     section_id: string
@@ -13,18 +14,23 @@ interface Section {
 
 export function Game ( {onComplete, section_details, isLastTrial} : {onComplete: () => void, section_details: Section, isLastTrial: boolean}) {
 
+    const context = useSurvey()
+    const { rock_prob, paper_prob, scissor_prob } = section_details
     const choices = ['rock', 'paper', 'scissors']
+
     const [userChoice, setUserChoice] = React.useState('')
     const [computerChoice, setComputerChoice] = React.useState('')
     const [result, setResult] = React.useState('')
+    const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
 
     function handleUserChoice(choice: string) {
+        if (hasUserMadeChoice) return
         setUserChoice(choice)
         console.log('User Choice:', userChoice)
         const randomChoice = choices[Math.floor(Math.random() * choices.length)]
         setComputerChoice(randomChoice)
         console.log('Computer Choice:', randomChoice)
-        console.log('User Choice:', userChoice)
+        setHasUserMadeChoice(true)
         handleResult(choice, randomChoice)
         // handleComputerChoice()
     }
@@ -67,9 +73,9 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
         <div>
       <h3>Rock, Paper, Scissors</h3>
       <div>
-        <Button onClick={() => handleUserChoice('rock')}>Rock</Button>
-        <Button onClick={() => handleUserChoice('paper')}>Paper</Button>
-        <Button onClick={() => handleUserChoice('scissors')}>Scissors</Button>
+        <Button onClick={() => handleUserChoice('rock')} disabled={hasUserMadeChoice}>Rock</Button>
+        <Button onClick={() => handleUserChoice('paper')} disabled={hasUserMadeChoice}>Paper</Button>
+        <Button onClick={() => handleUserChoice('scissors')} disabled={hasUserMadeChoice}>Scissors</Button>
       </div>
       {userChoice && computerChoice && result && (
         <div>
