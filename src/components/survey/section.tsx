@@ -46,6 +46,8 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
                             )
                         })}
                     </div>
+                    <br />
+                    <p>Current Trial: {currentTrial}</p>
                     <div className="fixed bottom-0 right-0 m-6">
                         { isLastSection ? (
                             <Button onClick={handleComplete}>
