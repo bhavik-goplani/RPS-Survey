@@ -12,13 +12,12 @@ interface Section {
     trial_no: number
 }
 
-export function Game ( {onComplete, section_details, isLastTrial} : {onComplete: () => void, section_details: Section, isLastTrial: boolean}) {
+export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoice} : {onComplete: () => void, section_details: Section, isLastTrial: boolean, onUserMadeChoice: (choiceMade: boolean) => void}) {
 
     const context = useSurvey()
     const { rock_prob, paper_prob, scissor_prob } = section_details
     const choices = ['rock', 'paper', 'scissors']
     const weights = [rock_prob, paper_prob, scissor_prob]
-    console.log('Weights:', weights)
 
     const [userChoice, setUserChoice] = React.useState('')
     const [computerChoice, setComputerChoice] = React.useState('')
@@ -31,6 +30,7 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
         console.log('User Choice:', userChoice)
         const computerChoice = handleComputerChoice()
         setHasUserMadeChoice(true)
+        if (isLastTrial) onUserMadeChoice(true)
         handleResult(choice, computerChoice)
     }
 
@@ -74,17 +74,8 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
                 onComplete()
             }
         }
-        , 2000)
+        , 1000)
 
-    }
-
-    function handleComplete() {
-        if (isLastTrial) {
-            console.log('Survey Complete')
-        }
-        else{
-            onComplete()
-        }
     }
 
     return (
@@ -102,16 +93,6 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
           <p>Result: {result}</p>
         </div>
       )}
-      <div className="fixed bottom right-4 m-6">
-        { isLastTrial && hasUserMadeChoice ? (
-            <Button onClick={handleComplete}>
-                Next Section
-            </Button>
-        ) : (
-            <></>
-        )
-        }
-    </div>
     </div>
     )
 }
