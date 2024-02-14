@@ -17,6 +17,8 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
     const context = useSurvey()
     const { rock_prob, paper_prob, scissor_prob } = section_details
     const choices = ['rock', 'paper', 'scissors']
+    const weights = [rock_prob, paper_prob, scissor_prob]
+    console.log('Weights:', weights)
 
     const [userChoice, setUserChoice] = React.useState('')
     const [computerChoice, setComputerChoice] = React.useState('')
@@ -27,15 +29,32 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
         if (hasUserMadeChoice) return
         setUserChoice(choice)
         console.log('User Choice:', userChoice)
-        const randomChoice = choices[Math.floor(Math.random() * choices.length)]
-        setComputerChoice(randomChoice)
-        console.log('Computer Choice:', randomChoice)
+        const computerChoice = handleComputerChoice()
         setHasUserMadeChoice(true)
-        handleResult(choice, randomChoice)
-        // handleComputerChoice()
+        handleResult(choice, computerChoice)
     }
 
-    function handleResult(userChoice: string, computerChoice: string) {
+    function handleComputerChoice() {
+        const cumulativeWeights: number[] = [];
+
+        for (let i = 0; i < weights.length; i++) {
+            cumulativeWeights[i] = weights[i] + (cumulativeWeights[i - 1] || 0);
+        }
+        
+        const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1];
+        const randomNumber = Math.random() * maxCumulativeWeight;
+        
+        for (let choicesIndex = 0; choicesIndex < choices.length; choicesIndex++) {
+            if (cumulativeWeights[choicesIndex] >= randomNumber) {
+                const computerChoice = choices[choicesIndex]
+                setComputerChoice(computerChoice)
+                console.log('Computer Choice:', computerChoice)
+                return computerChoice;
+            }
+        }
+    }
+
+    function handleResult(userChoice: string, computerChoice: string|undefined) {
         if (userChoice === computerChoice) setResult('Tie!')
         else if (
           (userChoice === 'rock' && computerChoice === 'scissors') ||
@@ -47,7 +66,6 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
           setResult('You Lose!')
         }
 
-        //do this after 2 seconds
         setTimeout(() => {
             if (isLastTrial) {
                 console.log('Survey Complete')
