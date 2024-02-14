@@ -103,7 +103,7 @@ export function Game ( {onComplete, section_details, isLastTrial} : {onComplete:
         </div>
       )}
       <div className="fixed bottom right-4 m-6">
-        { isLastTrial ? (
+        { isLastTrial && hasUserMadeChoice ? (
             <Button onClick={handleComplete}>
                 Next Section
             </Button>
