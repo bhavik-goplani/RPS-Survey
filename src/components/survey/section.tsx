@@ -17,6 +17,7 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     const context = useSurvey()
     const {section_id, trial_no} = section_details
     const [currentTrial, setCurrentTrial] = React.useState(0)
+    const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
 
     function handleComplete() {
         if (isLastSection) {
@@ -25,6 +26,10 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
         else{
             onComplete()
         }
+    }
+
+    function handleUserMadeChoice(choiceMade: boolean) {
+        setHasUserMadeChoice(choiceMade)
     }
 
         return (
@@ -41,23 +46,24 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
                                         onComplete={() => setCurrentTrial(currentTrial + 1)}
                                         section_details={section_details}
                                         isLastTrial={currentTrial === trial_no - 1}
+                                        onUserMadeChoice={handleUserMadeChoice}
                                     />
                                 </div>
                             )
                         })}
                     </div>
                     <br />
-                    <p>Current Trial: {currentTrial}</p>
+                    <p>Current Trial: {currentTrial+1}</p>
                     <div className="fixed bottom-0 right-0 m-6">
-                        { isLastSection ? (
+                        { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
                             <Button onClick={handleComplete}>
                                 Complete Survey
                             </Button>
-                        ) : (
+                        ) : ( hasUserMadeChoice && currentTrial+1 === trial_no)? (
                             <Button onClick={handleComplete}>
-                                Next Survey
+                                Next Section
                             </Button>
-                        )
+                        ) : null
                         }
                     </div>
                 </div>
