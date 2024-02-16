@@ -55,16 +55,21 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
     }
 
     function handleResult(userChoice: string, computerChoice: string|undefined) {
-        if (userChoice === computerChoice) setResult('Tie!')
+        let result
+        if (userChoice === computerChoice) result = 'Tie'
         else if (
           (userChoice === 'rock' && computerChoice === 'scissors') ||
           (userChoice === 'scissors' && computerChoice === 'paper') ||
           (userChoice === 'paper' && computerChoice === 'rock')
         ) {
-          setResult('You Win!')
+          result = 'User'
         } else {
-          setResult('You Lose!')
+          result = 'Computer'
         }
+
+        const trialsData = JSON.parse(localStorage.getItem('trials') || '[]')
+        trialsData.push({userChoice, computerChoice, result})
+        localStorage.setItem('trials', JSON.stringify(trialsData))
 
         setTimeout(() => {
             if (isLastTrial) {
@@ -90,7 +95,7 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
         <div>
           <p>User Choice: {userChoice}</p>
           <p>Computer Choice: {computerChoice}</p>
-          <p>Result: {result}</p>
+          <p>Winner: {result}</p>
         </div>
       )}
     </div>
