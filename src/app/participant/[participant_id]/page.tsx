@@ -83,6 +83,43 @@ export default function Page({ params }: { params: { participant_id: string } })
         fetchData()
     }, [participant_id])
 
+    React.useEffect(() => {
+        async function saveData () {
+            // Get the data from local storage
+            const trialsData = JSON.parse(localStorage.getItem('trials') || '[]')
+    
+            if (trialsData != null && trialsData.length > 0) {
+                // Send the data to the server
+                const res = await fetch('/api/response', { 
+                    method: 'POST',
+                    body: JSON.stringify({ participant_id, trialsData }),
+                    keepalive: true
+                });
+                trialsData.length = 0
+                localStorage.setItem('trials', JSON.stringify(trialsData))
+            }
+        }
+    
+        const handleBeforeUnload = async (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+    
+            // Save the data before the page is unloaded
+            await saveData();
+        };
+    
+        // Save the data every minute
+        const intervalId = setInterval(saveData, 60 * 1000);
+    
+        // Add the beforeunload event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        // Clean up the interval and the event listener when the component is unmounted
+        return () => {
+            clearInterval(intervalId);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [participant_id]);
+
     return (
         <> 
             <SurveyContext.Provider value={{ ...context }}>

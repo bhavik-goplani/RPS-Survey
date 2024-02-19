@@ -6,19 +6,22 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       Participant: {
         Row: {
+          participant_email: string
           participant_id: string
           survey_id: string
         }
         Insert: {
+          participant_email: string
           participant_id?: string
           survey_id: string
         }
         Update: {
+          participant_email?: string
           participant_id?: string
           survey_id?: string
         }
@@ -40,6 +43,7 @@ export interface Database {
           section_id: string | null
           survey_id: string | null
           user_choice: string
+          winner: string | null
         }
         Insert: {
           comp_choice?: string | null
@@ -48,6 +52,7 @@ export interface Database {
           section_id?: string | null
           survey_id?: string | null
           user_choice: string
+          winner?: string | null
         }
         Update: {
           comp_choice?: string | null
@@ -56,6 +61,7 @@ export interface Database {
           section_id?: string | null
           survey_id?: string | null
           user_choice?: string
+          winner?: string | null
         }
         Relationships: [
           {
@@ -142,7 +148,13 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_user: {
+        Args: {
+          email: string
+          password: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
