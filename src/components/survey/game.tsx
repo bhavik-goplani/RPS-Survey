@@ -15,7 +15,8 @@ interface Section {
 export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoice} : {onComplete: () => void, section_details: Section, isLastTrial: boolean, onUserMadeChoice: (choiceMade: boolean) => void}) {
 
     const context = useSurvey()
-    const { rock_prob, paper_prob, scissor_prob } = section_details
+    const { survey_id } = context
+    const { rock_prob, paper_prob, scissor_prob, section_id } = section_details
     const choices = ['rock', 'paper', 'scissors']
     const weights = [rock_prob, paper_prob, scissor_prob]
 
@@ -56,20 +57,18 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
 
     function handleResult(userChoice: string, computerChoice: string|undefined) {
         let result
-        if (userChoice === computerChoice) result = 'Tie'
+        if (userChoice === computerChoice) result = 'tie'
         else if (
           (userChoice === 'rock' && computerChoice === 'scissors') ||
           (userChoice === 'scissors' && computerChoice === 'paper') ||
           (userChoice === 'paper' && computerChoice === 'rock')
         ) {
-          result = 'User'
+          result = 'user'
         } else {
-          result = 'Computer'
+          result = 'computer'
         }
-
-        const trialsData = JSON.parse(localStorage.getItem('trials') || '[]')
-        trialsData.push({userChoice, computerChoice, result})
-        localStorage.setItem('trials', JSON.stringify(trialsData))
+        setResult(result)
+        storeData(userChoice, computerChoice, result)
 
         setTimeout(() => {
             if (isLastTrial) {
@@ -80,7 +79,12 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
             }
         }
         , 1000)
+    }
 
+    function storeData(userChoice: string, computerChoice: string|undefined, result: string) {
+        const trialsData = JSON.parse(localStorage.getItem('trials') || '[]')
+        trialsData.push({userChoice, computerChoice, result, survey_id, section_id})
+        localStorage.setItem('trials', JSON.stringify(trialsData))
     }
 
     return (
