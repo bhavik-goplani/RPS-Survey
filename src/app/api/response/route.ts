@@ -11,22 +11,26 @@ export async function POST(req: NextRequest) {
     const participant_id = body['participant_id'];
     const trials_data = body['trialsData'];    
 
-    console.log('Participant ID:', participant_id)
-    console.log('Trials Data:', trials_data)
-    // const { data, error } = await supabase.from('Response').insert([
-    //     {
-    //     participant_email: participant_email,
-    //     survey_id: survey_id,
-    //     },
-    // ]);
-
-    // if (error) {
-    //     console.error('Error inserting data:', error);
-    //     // Handle error here
-    // } else {
-    //     console.log('Data inserted successfully:', data);
-    //     // Handle success here
-    // }
-    
+    for (let i = 0; i < trials_data.length; i++) {
+        const { userChoice, computerChoice, result, survey_id, section_id } = trials_data[i]
+        const { data, error } = await supabase.from('Response').insert([
+            {
+                participant_id: participant_id,
+                user_choice: userChoice,
+                comp_choice: computerChoice,
+                winner: result,
+                survey_id: survey_id,
+                section_id: section_id,
+            },
+        
+        ])
+        if (error) {
+            console.error('Error inserting data:', error);
+            console.log('Partcipant ID:', participant_id)
+            console.log('Error Data:', trials_data[i])
+        } else {
+            console.log('Data inserted successfully');
+        }
+    }
     return NextResponse.json({})
 }
