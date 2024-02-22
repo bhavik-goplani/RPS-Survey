@@ -71,3 +71,30 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(data)
     }
 }
+
+export async function DELETE(req: NextRequest) {
+    // Delete the user from the auth table to remove their access to the survey
+    // DO NOT DELETE THE PARTICIPANT FROM THE PARTICIPANT TABLE
+    const supabase = createRouteHandlerClient({ cookies })
+    const url = new URL(req.url);
+    const participant_id = url.searchParams.get('participant_id');
+
+    if (!participant_id) {
+        return NextResponse.json({error: 'participant_id is required'}, {
+            status: 400,
+        })
+    }
+    else {
+        const { data, error } = await supabase.rpc('delete_user', { p_user_id: participant_id })
+        if (error) {
+            console.error('Error deleting user:', error);
+            return NextResponse.json({error}, {
+                status: 401,
+            })
+        }
+        else {
+            console.log('User deleted successfully:', data);
+            return NextResponse.json(data)
+        }
+    }
+}
