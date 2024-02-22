@@ -19,9 +19,25 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     const [currentTrial, setCurrentTrial] = React.useState(0)
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
 
-    function handleComplete() {
+    async function handleComplete() {
         if (isLastSection) {
-            console.log('Survey Complete')
+            console.log('Survey Complete Section')
+
+            const res = await fetch(`/api/participant?participant_id=${context.participant_id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (res.ok) {
+                console.log('Participant Deleted')
+            }
+            else {
+                console.log(res)
+            }
+            // Load Thank You page
+            
+            
         }
         else{
             onComplete()
