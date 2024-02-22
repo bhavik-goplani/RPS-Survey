@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import * as React from 'react'
 import { useSurvey } from '@/components/survey/survey-context'
 import { Game } from '@/components/survey/game'
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 interface Section {
     section_id: string
@@ -24,7 +24,7 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     async function handleComplete() {
         if (isLastSection) {
             console.log('Survey Complete Section')
-            router.push('/participant/thank-you')
+            router.push('/participant/thankyou')
 
             const res = await fetch(`/api/participant?participant_id=${context.participant_id}`, {
                 method: 'DELETE',
