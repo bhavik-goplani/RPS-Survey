@@ -72,7 +72,7 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
 
         setTimeout(() => {
             if (isLastTrial) {
-                console.log('Survey Complete')
+                console.log('Section Complete')
             }
             else{
                 onComplete()
