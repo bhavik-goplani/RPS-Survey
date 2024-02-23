@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import * as React from 'react'
 import { useSurvey } from '@/components/survey/survey-context'
 import { Game } from '@/components/survey/game'
+import { useRouter } from "next/navigation"
 
 interface Section {
     section_id: string
@@ -15,13 +16,28 @@ interface Section {
 export function Section({ section_details, onComplete, isLastSection }: { section_details: Section, onComplete: () => void, isLastSection: boolean}) {
 
     const context = useSurvey()
+    const router = useRouter()
     const {section_id, trial_no} = section_details
     const [currentTrial, setCurrentTrial] = React.useState(0)
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
 
-    function handleComplete() {
+    async function handleComplete() {
         if (isLastSection) {
-            console.log('Survey Complete')
+            console.log('Survey Complete Section')
+            router.push('/participant/thankyou')
+
+            const res = await fetch(`/api/participant?participant_id=${context.participant_id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (res.ok) {
+                console.log('Participant Deleted')
+            }
+            else {
+                console.log(res)
+            }
         }
         else{
             onComplete()

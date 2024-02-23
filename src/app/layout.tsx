@@ -5,6 +5,8 @@ import { NavBar } from '@/components/navbar/nav-bar'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
     children,
   }: {
