@@ -55,7 +55,8 @@ export function CreateSection( {survey_id} : {survey_id: string} ) {
     reset()
     setIsOpen(false)
     
-    const sum = values.rockProbability + values.paperProbability + values.scissorsProbability;
+    let sum = values.rockProbability + values.paperProbability + values.scissorsProbability;
+    sum = Math.round((sum) * 1000) / 1000;
     if (sum != 1) {
       return toast({
         title: "Error",
