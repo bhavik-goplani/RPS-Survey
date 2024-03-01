@@ -23,12 +23,13 @@ export default function ThankYou() {
       if (res.ok) {
           console.log('Participant Deleted')
           router.refresh()
-          const res = await fetch('auth/signout',
+          const res = await fetch('/auth/signout',
           {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
               },
+              credentials: 'same-origin',
           }
           )
       }

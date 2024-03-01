@@ -26,19 +26,7 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
         if (isLastSection) {
             console.log('Survey Complete Section')
             await saveData()
-            router.push('/participant/thankyou')
-            const res = await fetch(`/api/participant?participant_id=${context.participant_id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            if (res.ok) {
-                console.log('Participant Deleted')
-            }
-            else {
-                console.log(res)
-            }
+            router.push(`/participant/${participant_id}/thankyou`)
         }
         else{
             onComplete()
