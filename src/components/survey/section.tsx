@@ -18,14 +18,15 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     const context = useSurvey()
     const router = useRouter()
     const {section_id, trial_no} = section_details
+    const { participant_id } = context
     const [currentTrial, setCurrentTrial] = React.useState(0)
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
 
     async function handleComplete() {
         if (isLastSection) {
             console.log('Survey Complete Section')
+            await saveData()
             router.push('/participant/thankyou')
-
             const res = await fetch(`/api/participant?participant_id=${context.participant_id}`, {
                 method: 'DELETE',
                 headers: {
@@ -41,6 +42,22 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
         }
         else{
             onComplete()
+        }
+    }
+
+    async function saveData () {
+        // Get the data from local storage
+        const trialsData = JSON.parse(localStorage.getItem('trials') || '[]')
+
+        if (trialsData != null && trialsData.length > 0) {
+            // Send the data to the server
+            const res = await fetch('/api/response', { 
+                method: 'POST',
+                body: JSON.stringify({ participant_id, trialsData }),
+                keepalive: true
+            });
+            trialsData.length = 0
+            localStorage.setItem('trials', JSON.stringify(trialsData))
         }
     }
 
