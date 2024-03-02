@@ -2,12 +2,15 @@
 import { Survey } from '@/components/survey/survey'
 import { SurveyContext } from '@/components/survey/survey-context'
 import * as React from 'react'
+import { useRouter } from "next/navigation"
 
 export const dynamic = 'force-dynamic'
 
 export default function Page({ params }: { params: { participant_id: string } }) {
     
     const participant_id = params.participant_id
+    const submission = localStorage.getItem('submission')
+    const router = useRouter()
     const [context, setContext] = React.useState<SurveyContext>({
         participant_id: params.participant_id,
         survey_id: '',
@@ -120,6 +123,14 @@ export default function Page({ params }: { params: { participant_id: string } })
         };
     }, [participant_id]);
 
+    if (submission) {
+        router.push(`/participant/${participant_id}/thankyou`)
+        return (
+            <div className="container mx-auto py-10">
+                <h1 className="text-2xl font-semibold tracking-tight">Thank you for participating in the survey!</h1>
+            </div>
+        )
+    }
     return (
         <> 
             <SurveyContext.Provider value={{ ...context }}>
