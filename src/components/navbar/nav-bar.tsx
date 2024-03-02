@@ -32,9 +32,6 @@ export function NavBar( { session, userRole }: { session: Session | null, userRo
                     <ViewSurveyButton session={session} userRole={userRole}/>
                 </div>
                 <div className="pr-4"> {/* Add padding-right for spacing */}
-                    <ViewResponseButton session={session} userRole={userRole}/>
-                </div>
-                <div className="pr-4"> {/* Add padding-right for spacing */}
                     <LogoutButton session={session} />
                 </div>
                 <div className="ml-4"> {/* Add margin-left for spacing */}
