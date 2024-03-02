@@ -25,6 +25,7 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     async function handleComplete() {
         if (isLastSection) {
             console.log('Survey Complete Section')
+            localStorage.setItem('submission', 'true')
             await saveData()
             router.push(`/participant/${participant_id}/thankyou`)
         }
