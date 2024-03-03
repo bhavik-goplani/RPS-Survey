@@ -32,6 +32,8 @@ export default function ThankYou() {
               credentials: 'same-origin',
           }
           )
+          router.push('/')
+          router.refresh()
       }
       else {
           console.log(res)

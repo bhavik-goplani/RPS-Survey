@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import * as React from 'react'
 import { useSurvey } from '@/components/survey/survey-context'
 import { Game } from '@/components/survey/game'
+import { Icons } from "@/components/icons"
 import { useRouter } from "next/navigation"
 
 interface Section {
@@ -21,12 +22,15 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
     const { participant_id } = context
     const [currentTrial, setCurrentTrial] = React.useState(0)
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     async function handleComplete() {
         if (isLastSection) {
+            setIsLoading(true)
             console.log('Survey Complete Section')
             localStorage.setItem('submission', 'true')
             await saveData()
+            setIsLoading(false)
             router.push(`/participant/${participant_id}/thankyou`)
         }
         else{
@@ -78,7 +82,10 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
                     <p>Current Trial: {currentTrial+1}</p>
                     <div className="fixed bottom-0 right-0 m-6">
                         { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
-                            <Button onClick={handleComplete}>
+                            <Button onClick={handleComplete} disabled={isLoading}>
+                                {isLoading && (
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                )}
                                 Complete Survey
                             </Button>
                         ) : ( hasUserMadeChoice && currentTrial+1 === trial_no)? (
