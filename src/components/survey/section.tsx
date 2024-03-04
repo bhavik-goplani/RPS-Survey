@@ -60,41 +60,37 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
 
         return (
             <>
-                <div className="container mx-auto py-10">
-                    <h3 className="text-2xl font-semibold tracking-tight">Section - {section_id}</h3>
-                    <br />
-                    <div>                            
-                        {Array.from({ length: trial_no },).map((_, i) => {
-                            if (i !== currentTrial) return null
-                            return (
-                                <div key={i}>
-                                    <Game
-                                        onComplete={() => setCurrentTrial(currentTrial + 1)}
-                                        section_details={section_details}
-                                        isLastTrial={currentTrial === trial_no - 1}
-                                        onUserMadeChoice={handleUserMadeChoice}
-                                    />
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <br />
-                    <p>Current Trial: {currentTrial+1}</p>
-                    <div className="fixed bottom-0 right-0 m-6">
-                        { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
-                            <Button onClick={handleComplete} disabled={isLoading}>
-                                {isLoading && (
-                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                )}
-                                Complete Survey
-                            </Button>
-                        ) : ( hasUserMadeChoice && currentTrial+1 === trial_no)? (
-                            <Button onClick={handleComplete}>
-                                Next Section
-                            </Button>
-                        ) : null
-                        }
-                    </div>
+                <div>                            
+                    {Array.from({ length: trial_no },).map((_, i) => {
+                        if (i !== currentTrial) return null
+                        return (
+                            <div key={i}>
+                                <Game
+                                    onComplete={() => setCurrentTrial(currentTrial + 1)}
+                                    section_details={section_details}
+                                    isLastTrial={currentTrial === trial_no - 1}
+                                    onUserMadeChoice={handleUserMadeChoice}
+                                />
+                            </div>
+                        )
+                    })}
+                </div>
+                <br />
+                <p>Current Trial: {currentTrial+1}</p>
+                <div className="fixed bottom-0 right-0 m-6">
+                    { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
+                        <Button onClick={handleComplete} disabled={isLoading}>
+                            {isLoading && (
+                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Complete Survey
+                        </Button>
+                    ) : ( hasUserMadeChoice && currentTrial+1 === trial_no)? (
+                        <Button onClick={handleComplete}>
+                            Next Section
+                        </Button>
+                    ) : null
+                    }
                 </div>
             </>
         )

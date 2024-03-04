@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Button } from "@/components/ui/button"
 import { useSurvey } from '@/components/survey/survey-context'
+import { Icons } from "@/components/icons"
 
 interface Section {
     section_id: string
@@ -88,12 +89,17 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
     }
 
     return (
-        <div>
-      <h3>Rock, Paper, Scissors</h3>
-      <div>
-        <Button onClick={() => handleUserChoice('rock')} disabled={hasUserMadeChoice}>Rock</Button>
-        <Button onClick={() => handleUserChoice('paper')} disabled={hasUserMadeChoice}>Paper</Button>
-        <Button onClick={() => handleUserChoice('scissors')} disabled={hasUserMadeChoice}>Scissors</Button>
+    <div className='container mx-auto py-20'>
+      <div className='flex justify-center space-x-4'>
+        <button onClick={() => handleUserChoice('rock')} disabled={hasUserMadeChoice}>
+          <Icons.rock className= "h-64 w-64"/>
+        </button>
+        <button onClick={() => handleUserChoice('paper')} disabled={hasUserMadeChoice}>
+          <Icons.paper className='h-64 w-64'/>
+        </button>
+        <button onClick={() => handleUserChoice('scissors')} disabled={hasUserMadeChoice}>
+          <Icons.scissors className='h-64 w-64'/>
+        </button>
       </div>
       {userChoice && computerChoice && result && (
         <div>

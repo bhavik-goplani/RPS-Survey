@@ -3,6 +3,10 @@ import { Survey } from '@/components/survey/survey'
 import { SurveyContext } from '@/components/survey/survey-context'
 import * as React from 'react'
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { motion } from 'framer-motion';
+import { SparklesPreview } from '@/components/survey/sparkles-page'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,6 +14,7 @@ export default function Page({ params }: { params: { participant_id: string } })
     
     const participant_id = params.participant_id
     const [submission, setSubmission] = React.useState<string | null>(null);
+    const [start, setStart] = React.useState(false);
 
     React.useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -139,10 +144,30 @@ export default function Page({ params }: { params: { participant_id: string } })
     return (
         <> 
             <SurveyContext.Provider value={{ ...context }}>
-            <div className="container mx-auto py-10">
-                <h1 className="text-2xl font-semibold tracking-tight">Welcome to the Survey!</h1>
-                <Survey/>
-            </div>
+            <motion.div className="flex items-center justify-center" style={{ height: 'calc(100vh - 88px)' }} layout>
+                {!start && (
+                    <SparklesPreview />
+                )}
+                {!start && (
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setStart(true)}
+                        className={cn(buttonVariants({ variant: "default", size: "user" }))}
+                    >
+                    Start
+                    </motion.button>
+                )}
+                {start && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1 }}
+                    >
+                        <Survey />
+                    </motion.div>
+                )}
+            </motion.div>
             </SurveyContext.Provider>
         </>
     )
