@@ -30,6 +30,7 @@ export default async function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <head>
           <title>RPS Survey</title>
+          <link rel="icon" href="/images/favicon.ico"/>
         </head>
         <body className="min-h-screen flex flex-col bg-background font-sans antialiased">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
