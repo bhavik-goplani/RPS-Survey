@@ -5,8 +5,8 @@ import { AuthForm } from "@/components/auth-form"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: "RPS Survey App",
+  description: "Applied Behavioral Science Research: Automated survey generator",
 }
 
 export default function Home() {
