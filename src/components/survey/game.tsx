@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Button } from "@/components/ui/button"
+import { motion } from 'framer-motion'
 import { useSurvey } from '@/components/survey/survey-context'
 import { Icons } from "@/components/icons"
 
@@ -25,8 +25,10 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
     const [computerChoice, setComputerChoice] = React.useState('')
     const [result, setResult] = React.useState('')
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
+    const [gameStarted, setGameStarted] = React.useState(false);
 
     function handleUserChoice(choice: string) {
+        setGameStarted(true)
         if (hasUserMadeChoice) return
         setUserChoice(choice)
         console.log('User Choice:', userChoice)
@@ -79,7 +81,7 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
                 onComplete()
             }
         }
-        , 1000)
+        , 2000)
     }
 
     function storeData(userChoice: string, computerChoice: string|undefined, result: string) {
@@ -90,23 +92,69 @@ export function Game ( {onComplete, section_details, isLastTrial, onUserMadeChoi
 
     return (
     <div className='container mx-auto py-20'>
-      <div className='flex justify-center space-x-4'>
-        <button onClick={() => handleUserChoice('rock')} disabled={hasUserMadeChoice}>
+      {!gameStarted && (
+      <div className='flex justify-center space-x-8'>
+        <motion.button 
+          onClick={() => handleUserChoice('rock')} 
+          disabled={hasUserMadeChoice}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
           <Icons.rock className= "h-64 w-64"/>
-        </button>
-        <button onClick={() => handleUserChoice('paper')} disabled={hasUserMadeChoice}>
+        </motion.button>
+        <motion.button 
+          onClick={() => handleUserChoice('paper')} 
+          disabled={hasUserMadeChoice}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
           <Icons.paper className='h-64 w-64'/>
-        </button>
-        <button onClick={() => handleUserChoice('scissors')} disabled={hasUserMadeChoice}>
+        </motion.button>
+        <motion.button 
+          onClick={() => handleUserChoice('scissors')} 
+          disabled={hasUserMadeChoice}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
           <Icons.scissors className='h-64 w-64'/>
-        </button>
+        </motion.button>
       </div>
-      {userChoice && computerChoice && result && (
-        <div>
-          <p>User Choice: {userChoice}</p>
-          <p>Computer Choice: {computerChoice}</p>
-          <p>Winner: {result}</p>
+      )}
+      {gameStarted && userChoice && computerChoice && (
+        <div className='flex justify-center space-x-8'>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {userChoice === 'rock' && <Icons.rock className='h-64 w-64'/>}
+            {userChoice === 'paper' && <Icons.paper className='h-64 w-64'/>}
+            {userChoice === 'scissors' && <Icons.scissors className='h-64 w-64'/>}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0}}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            {computerChoice === 'rock' && <Icons.rock className='h-64 w-64'/>}
+            {computerChoice === 'paper' && <Icons.paper className='h-64 w-64'/>}
+            {computerChoice === 'scissors' && <Icons.scissors className='h-64 w-64'/>}
+          </motion.div>
         </div>
+      )}
+
+      {result && (
+        <motion.div
+          className="text-6xl font-semibold tracking-tight flex justify-center"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 20, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 12, textAlign: 'center', duration: 0.5, delay: 1}}
+        >
+          {result === 'user' && <p>You won!</p>}
+          {result === 'computer' && <p>Computer won!</p>}
+          {result === 'tie' && <p>It&apos;s a tie!</p>}
+        </motion.div>
       )}
     </div>
     )
