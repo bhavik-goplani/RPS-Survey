@@ -58,7 +58,7 @@ export default function ThankYou() {
           opacity: 0,
           position: 'relative',
           top: '30px'
-        }}>Thank You for participating in the survey!</h1>
+        }}>Thank you for participating in the survey!</h1>
         <style jsx>{`
           @keyframes fadeInMoveUp {
             0% {
