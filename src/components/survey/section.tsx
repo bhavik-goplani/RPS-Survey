@@ -1,10 +1,12 @@
 'use client'
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import * as React from 'react'
 import { useSurvey } from '@/components/survey/survey-context'
 import { Game } from '@/components/survey/game'
 import { Icons } from "@/components/icons"
 import { useRouter } from "next/navigation"
+import { motion } from 'framer-motion';
 
 interface Section {
     section_id: string
@@ -79,16 +81,27 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
                 <p>Current Trial: {currentTrial+1}</p>
                 <div className="fixed bottom-0 right-0 m-6">
                     { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
-                        <Button onClick={handleComplete} disabled={isLoading}>
+                        <motion.button 
+                            onClick={handleComplete} 
+                            disabled={isLoading}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={cn(buttonVariants({ variant: "default", size: "default" }))}
+                        >
                             {isLoading && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}
                             Complete Survey
-                        </Button>
+                        </motion.button>
                     ) : ( hasUserMadeChoice && currentTrial+1 === trial_no)? (
-                        <Button onClick={handleComplete}>
+                        <motion.button 
+                            onClick={handleComplete}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={cn(buttonVariants({ variant: "default", size: "default" }))}
+                        >
                             Next Section
-                        </Button>
+                        </motion.button>
                     ) : null
                     }
                 </div>
