@@ -20,7 +20,7 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
 
     const context = useSurvey()
     const router = useRouter()
-    const {section_id, trial_no} = section_details
+    const {trial_no} = section_details
     const { participant_id } = context
     const [currentTrial, setCurrentTrial] = React.useState(0)
     const [hasUserMadeChoice, setHasUserMadeChoice] = React.useState(false)
@@ -66,19 +66,22 @@ export function Section({ section_details, onComplete, isLastSection }: { sectio
                     {Array.from({ length: trial_no },).map((_, i) => {
                         if (i !== currentTrial) return null
                         return (
-                            <div key={i}>
+                            <motion.div key={i} layout>
                                 <Game
                                     onComplete={() => setCurrentTrial(currentTrial + 1)}
                                     section_details={section_details}
                                     isLastTrial={currentTrial === trial_no - 1}
                                     onUserMadeChoice={handleUserMadeChoice}
                                 />
-                            </div>
+                            </motion.div>
                         )
                     })}
                 </div>
-                <br />
-                <p>Current Trial: {currentTrial+1}</p>
+                <motion.div
+                    className="fixed font-semibold tracking-tight bottom-0 left-0 m-6"
+                    >
+                    <p>Current Trial: {currentTrial+1}</p>
+                </motion.div>
                 <div className="fixed bottom-0 right-0 m-6">
                     { hasUserMadeChoice && (isLastSection && (currentTrial+1 === trial_no))? (
                         <motion.button 
