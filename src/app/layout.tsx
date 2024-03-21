@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { NavBar } from '@/components/navbar/nav-bar'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import { Analytics } from "@vercel/analytics/react"
 
 export const dynamic = 'force-dynamic'
 
@@ -39,6 +40,7 @@ export default async function RootLayout({
               {children}
             <Toaster />
           </ThemeProvider>
+          <Analytics/>
         </body>
       </html>
     )
