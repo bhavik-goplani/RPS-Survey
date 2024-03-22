@@ -1,6 +1,10 @@
 ## Overview
-The RPS Survey Platform is a web application built to address the needs of researchers in conducting surveys and collecting data from participants. It provides a user-friendly interface for researchers to create surveys, analyze results, and manage participants. Additionally, participants can access the platform to take surveys and contribute data. Below, you'll find information about the project, including its architecture, database schema, and usage flow. 
-> Note: This project was built for the Applied Behavioral Science Lab at KU to conduct the generalized matching law research.
+The RPS Survey Platform is a web application designed to facilitate research into human decision-making processes, specifically within the context of the Rock/Paper/Scissors (RPS) game. This platform serves as a critical tool for the Applied Behavioral Science Lab at KU, enabling the exploration of the generalized matching law — a principle that describes how individuals allocate their responses in situations where they are presented with concurrent choices.
+
+The research conducted through this platform involves adult human subjects participating in a simulated RPS game against a computerized opponent. The opponent's responses are based on programmed probabilities that vary across different blocks of trials, allowing researchers to observe and analyze patterns in human response allocation.
+
+The platform addresses the needs of researchers in conducting surveys and collecting data from participants. It provides a user-friendly interface for researchers to create surveys, analyze results, and manage participants. Additionally, participants can access the platform to take surveys and contribute data. Below, you'll find information about the project, including its features, database schema, and usage flow. 
+> Note: This project was built for the Applied Behavioral Science Lab at KU to conduct the generalized matching law research. 
 
 ## Features
 - Survey Creation: Researchers can create and customize surveys according to their research needs.
